@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PS-LightGBM Model Malware Detection</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+<!--<script src="/static/js/jquery.form.js"></script>-->
+</head>
+    <body>
+        <div class="container">
+            <br />
+            <h3 align="center">Machine Learning for Malware Detection</h3>
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-heading"><b>Master Thesis - Quynh Trinh. <br> Instructor - Hien Vu.</b></div>
+                <div class="panel-body">
+		     
+		     <div>Please upload Portable Executable file to analysis(.acm , .ax , .cpl , .dll , .drv , .efi , .exe , .mui , .ocx , .scr , .sys , .tsp)</div><br>
+                    <form id="uploadImage" action="/upload" method="post">
+                        <div class="form-group">
+                           
+                            <input type="file" name="uploadFile" id="uploadFile" accept="*.*" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" id="uploadSubmit" value="Upload" class="btn btn-info" />
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div id="targetLayer" style="display:none;"></div>
+                    </form>
+                    <div id="loader-icon" style="display:none;"><img src="/static/images/loader.gif" width="100" height="100"/></div>
+                </div>
+            </div>
+        </div>
+<script>
+$(document).ready(function(){
+    $('#uploadImage').submit(function(event){
+        if($('#uploadFile').val()){
+            event.preventDefault();
+            $('#loader-icon').show();
+            $('#targetLayer').hide();
+            $(this).ajaxSubmit({
+                target: '#targetLayer',
+                beforeSubmit:function(){
+                    $('.progress-bar').width('50%');
+                },
+                uploadProgress: function(event, position, total, percentageComplete)
+                {
+                    $('.progress-bar').animate({
+                        width: percentageComplete + '%'
+                    }, {
+                        duration: 1000
+                    });
+                },
+                success:function(data){
+                    $('#loader-icon').hide();
+                    $('#targetLayer').show();
+                    $('#targetLayer').append(data.htmlresponse);
+                },
+                resetForm: true
+            });
+        }
+        return false;
+    });
+});
+</script>
+</body>
+</html>
